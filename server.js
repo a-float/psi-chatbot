@@ -1,4 +1,5 @@
 require('dotenv').config()
+const fetch = require('node-fetch')
 const express = require('express')
 const { WebhookClient } = require('dialogflow-fulfillment')
 const app = express()
@@ -11,17 +12,43 @@ app.get('/', (req, res) => {
 
 app.post('/webhook', (req, res) => {
     // get agent from request
-    console.log("boom");
     let agent = new WebhookClient({ request: req, response: res })    // create intentMap for handle intent
     let intentMap = new Map();    // add intent map 2nd parameter pass function
     intentMap.set('Pogoda', handleWeatherRequest)    // now agent is handle request and pass intent map
     agent.handleRequest(intentMap)
 })
 
+function removePolish(string) {
+    const from = ["ą", "ć", "ę", "ł", "ń", "ó", "ś", "ż", "ź", "Ą", "Ć", "Ę", "Ł", "Ń", "Ó", "Ś", "Ż", "Ź"]
+    const to = ["a", "c", "e", "l", "n", "o", "s", "z", "z", "A", "C", "E", "L", "N", "O", "S", "Z", "Z"]
+    for (let i = 0; i < from.length; i++) {
+        string = string.replace(from[i], to[i])
+    }
+    return string
+}
+
 function handleWeatherRequest(agent) {
-    console.log(agent.action)
-    url = "http://api.openweathermap.org/data/2.5/weather?q=Krakow&units=metric&lang=pl&appid=c92e28a0be64d2e48ae6396907988666"
-    agent.add("This is the weather")
+    let date = new Date(agent.parameters.date)
+    const diffTime = date - new Date()
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+    if (diffDays > 1 || (new Date()).getDay() != date.getDay()) {
+        agent.add("Niestety mogę sprawdzić tylko dzisiejszą pogodę.");
+    }
+    let city = agent.parameters.city
+    city = removePolish(city)
+    let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=pl&appid=${process.env.WEATHER_KEY}`
+    fetch(url).then(response => response.json()).then(json => {
+        if (json.cod != 200) {
+            resp = "Niestety nie znam takiego miasta :c"
+        }
+        else {
+            resp = `W mieście ${city} jest dzisiaj ${json.weather[0].description}. Najniższa temperatura wyniesie ${json.main.temp_min}°C, a najwyższa ${json.main.temp_max}°C, ale temperatura odczuwalna wyniesie ${json.main.feels_like}°C.`
+        }
+        agent.add(resp);
+    }).catch(e => {
+        console.log(e)
+        agent.add("Ups, nie udało mi się sprawdzić pogody :(");
+    })
 }
 
 const port = process.env.PORT || 3000
