@@ -28,6 +28,7 @@ function removePolish(string) {
 }
 
 function handleWeatherRequest(agent) {
+    console.log(agent.parameters.date);
     let date = new Date(agent.parameters.date)
     const now = new Date()
     console.log(date.toUTCString() + " " + now.toUTCString());
