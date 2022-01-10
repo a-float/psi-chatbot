@@ -2,6 +2,7 @@ require('dotenv').config()
 const fetch = require('node-fetch')
 const express = require('express')
 const { WebhookClient } = require('dialogflow-fulfillment')
+const { Image } = require('dialogflow-fulfillment')
 const app = express()
 app.use(express.static('public'))
 app.use(express.json())
@@ -14,7 +15,8 @@ app.post('/webhook', (req, res) => {
     // get agent from request
     let agent = new WebhookClient({ request: req, response: res })    // create intentMap for handle intent
     let intentMap = new Map();    // add intent map 2nd parameter pass function
-    intentMap.set('Pogoda', handleWeatherRequest)    // now agent is handle request and pass intent map
+    intentMap.set('Pogoda', handleWeatherRequest)
+    intentMap.set('Kaczka', handleDuckRequest)
     agent.handleRequest(intentMap)
 })
 
@@ -27,10 +29,21 @@ function removePolish(string) {
     return string
 }
 
+function handleDuckRequest(agent){
+    const url = "https://random-d.uk/api/v2/quack"
+    fetch(url).then(data => data.json).then(json => {
+        const image = Image(json.url)
+        agent.add(image)
+    }).catch(e => {
+        agent.add("Przepraszam, nie udało mi się złapać żadnej kaczki :<")
+    })
+}
+
 function handleWeatherRequest(agent) {
     let date = Date.parse(agent.parameters.date)
     const now = new Date()
-    console.log(date.toUTCString() + " " + now.toUTCString());
+    console.log(date);
+    // console.log(date.toUTCString() + " " + now.toUTCString());
     if ( now.getFullYear() != date.getFullYear || now.getMonth() != date.getMonth() || now.getDay() != date.getDay()) {
         agent.add("Niestety mogę sprawdzić tylko dzisiejszą pogodę.");
     }
