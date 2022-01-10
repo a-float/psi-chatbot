@@ -20,6 +20,7 @@ function handleWebHookIntent(agent) {
 }/**
 * now listing the server on port number 3000 :)
 * */
-app.listen(3000, () => {
+const port = process.env.PORT | 3000
+app.listen(port, () => {
     console.log("Server is Running on port 3000")
 })
