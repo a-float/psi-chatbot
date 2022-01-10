@@ -29,9 +29,10 @@ function removePolish(string) {
 
 function handleWeatherRequest(agent) {
     let date = new Date(agent.parameters.date)
-    const diffTime = date - new Date()
+    const now = new Date()
+    const diffTime = date - now
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-    if (diffDays > 1 || (new Date()).getDay() != date.getDay()) {
+    if ( now.getFullYear() != date.getFullYear || now.getMonth() != date.getMonth() || now.getDay() != date.getDay()) {
         agent.add("Niestety mogę sprawdzić tylko dzisiejszą pogodę.");
     }
     let city = agent.parameters.city
