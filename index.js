@@ -3,6 +3,7 @@ const { WebhookClient } = require('dialogflow-fulfillment')
 const app = express()
 app.use(express.json())
 app.get('/', (req, res) => {
+    console.log("Got a request")
     res.send("Server is working!")
 })/**
 * on this route dialogflow send the webhook request
@@ -20,7 +21,7 @@ function handleWebHookIntent(agent) {
 }/**
 * now listing the server on port number 3000 :)
 * */
-const port = process.env.PORT | 3000
+const port = process.env.PORT || 3000
 app.listen(port, () => {
-    console.log("Server is Running on port 3000")
+    console.log("Server is running on port " + port)
 })
