@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hero - Free Bulma template</title>
+    <link rel="shortcut icon" href="../images/fav_icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <!-- Bulma Version 0.9.0-->
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css" />
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link href="/your-path-to-fontawesome/css/solid.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/bulma-modal-fx/dist/css/modal-fx.min.css" />
+</head>
+
+<body>
+    <section class="hero is-medium is-link is-bold has-background">
+        <img class="hero-background is-transparent" src="bg.jpg" />
+        <div class="hero-head">
+            <nav class="navbar">
+                <div class="container">
+                    <div class="navbar-brand">
+                        <span class="navbar-burger burger" data-target="navbarMenu">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </div>
+                    <div id="navbarMenu" class="navbar-menu">
+                        <div class="navbar-end">
+                            <div class="tabs is-left">
+                                <span class="navbar-item">
+                                    <a class="button is-white is-outlined"
+                                        href="https://github.com/BulmaTemplates/bulma-templates/blob/master/templates/hero.html">
+                                        <span class="icon">
+                                            <i class="fa fa-github"></i>
+                                        </span>
+                                        <span>Template source</span>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title has-text-white" style="font-size: 4rem;">
+                    Travelio
+                </h1>
+                <h2 class="subtitle">
+                    Dychnij se byczku
+                </h2>
+            </div>
+        </div>
+    </section>
+    <section class="container pt-5">
+        <div class="columns features">
+            <div class="column is-4">
+                <div class="card is-shady">
+                    <div class="card-image has-text-centered">
+                        <i class="fa fa-compass"></i>
+                    </div>
+                    <div class="card-content">
+                        <div class="content">
+                            <h4>Szeroki wybór</h4>
+                            <p>Wybierz spośród tysięcy oferowanych przez nas noclegów, wycieczek oraz atrakcji. Od
+                                gorących plaż po skutą lodem Antarktykę. Na pewno znajdziesz coś dla siebie.</p>
+                            <p><a href="#">Learn more</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column is-4">
+                <div class="card is-shady">
+                    <div class="card-image has-text-centered">
+                        <i class="fa fa-comments"></i>
+                    </div>
+                    <div class="card-content">
+                        <div class="content">
+                            <h4>Kompleksowa obsługa</h4>
+                            <p>Zaawansowana technologia AI, dostępna poprzez pomarańczowy guzik w prawym dolnym rogu
+                                ekranu, odpowie na wszelkie pytania, tak by proces rejestracji stał się niemal tak
+                                przyjemny jak wybrany przy jego pomocy sposób wypoczynku.</p>
+                            <p><a href="#">Learn more</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column is-4">
+                <div class="card is-shady">
+                    <div class="card-image has-text-centered">
+                        <i class="fa fa-credit-card"></i>
+                    </div>
+                    <div class="card-content">
+                        <div class="content">
+                            <h4>Bezkonkurencyjne ceny</h4>
+                            <p>Tylko z nami wybierzesz się na wymarzone wakacje nie uzywając portfela ani konta
+                                bankowego. Korzystając z opatentowej techniki Fikcyjności™ wszystkie pakiety z naszej
+                                oferty są kompletnie darmowe!</p>
+                            <p><a href="#">Learn more</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered">
+                <p>
+                    <a class="icon" href="https://github.com/BulmaTemplates/bulma-templates">
+                        <i class="fa fa-github"></i>
+                    </a>
+                </p>
+                <div class="control level-item">
+                    <a href="https://github.com/BulmaTemplates/bulma-templates">
+                        <div class="tags has-addons">
+                            <span class="tag is-dark">Bulma Templates</span>
+                            <span class="tag is-info">MIT license</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <df-messenger intent="WELCOME" chat-title="Doradca AI" agent-id="aa1a06cd-63ee-4678-bf00-2d6b2ed719e2"
+        language-code="pl"></df-messenger>
+</body>
+
+</html>
