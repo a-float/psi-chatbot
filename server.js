@@ -31,7 +31,7 @@ function handleChooseOffer(agent) {
             const trip = results[0]
             agent.add(`Oferta ${trip.name} wyrusza z miasta ${trip.place} i rozpoczyna się ${prettyDate(trip.date)}.`)
             agent.add("Czy chciałbyś zarezerwować miejsce?")
-            agent.set(trip.name, 2)
+            console.log(Object.keys(agent))
         } else {
             agent.add("Nie kojarzę takiej oferty :c")
         }
