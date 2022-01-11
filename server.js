@@ -32,7 +32,7 @@ function removePolish(string) {
 }
 
 function getAllOffers() {
-    trips.find({}, function (err, result) {
+    return trips.find({}, function (err, result) {
         console.log("Searching the database");
         if (err) {
             console.log(err)
@@ -53,6 +53,8 @@ function handleOffersRequest(agent) {
     console.log("Offers request " + JSON.stringify(agent.parameters));
     return getAllOffers().then(answer => {
         agent.add(answer)
+    }).catch(err => {
+        console.log(err)
     })
 };
 
