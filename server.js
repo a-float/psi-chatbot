@@ -34,18 +34,20 @@ function removePolish(string) {
 function handleOffersRequest(agent) {
     console.log("Offers request " + JSON.stringify(agent.parameters));
     trips.find({}, function (err, result) {
+        console.log("Searching the database");
         if (err) {
             console.log(err)
-            return agent.add("Ups, zapomniałem jakie są oferty. Może zaraz je sobie przypomnę...")
+            agent.add("Ups, zapomniałem jakie są oferty. Może zaraz je sobie przypomnę...")
         } else {
             if (result.length > 0) {
                 console.log("returning the offers");
                 const options = result.map(r => r.name + " " + r.date).join("\n")
-                return agent.add("W najbliższym czasie oferujemy następujące wycieczi:\n" + options + "Czy któraś z nich Cię interesuje?")
+                agent.add("W najbliższym czasie oferujemy następujące wycieczi:\n" + options + "Czy któraś z nich Cię interesuje?")
             } else {
-                return agent.add("Niestety nie mamy obecnie dostępnych żadnych ofert.")
+                agent.add("Niestety nie mamy obecnie dostępnych żadnych ofert.")
             }
         }
+        agent.end("")
     });
 }
 
