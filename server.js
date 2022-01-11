@@ -32,7 +32,7 @@ function removePolish(string) {
 function handleDuckRequest(agent) {
     console.log("Duck request " + agent.parameters);
     const url = "https://random-d.uk/api/v2/quack"
-    return fetch(url).then(data => data.json).then(json => {
+    return fetch(url).then(response => response.json()).then(json => {
         console.log(JSON.stringify(json))
         const image = new Image(json.url)
         agent.add(image)
@@ -62,7 +62,13 @@ function handleWeatherRequest(agent) {
             resp = "Niestety nie znam takiego miasta :c"
         }
         else {
-            resp = `W mieście ${city} jest dzisiaj ${json.weather[0].description}. Najniższa temperatura wyniesie ${json.main.temp_min}°C, a najwyższa ${json.main.temp_max}°C, ale temperatura odczuwalna wyniesie ${json.main.feels_like}°C.`
+            let emoji = "🥵"
+            if(json.main.feels_like < 30){
+                emoji = "🤗";
+            } else if(json.main.feels_like < 0){
+                emoji = "🥶"
+            }
+            resp = `W mieście ${city} jest dzisiaj ${json.weather[0].description}. Najniższa temperatura wyniesie ${json.main.temp_min}°C, a najwyższa ${json.main.temp_max}°C. Temperatura odczuwalna wyniesie ${json.main.feels_like}°C. ${emoji}`
         }
         agent.add(resp);
     }).catch(e => {
