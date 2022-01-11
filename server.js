@@ -19,8 +19,25 @@ app.post('/webhook', (req, res) => {
     intentMap.set('Pogoda', handleWeatherRequest)
     intentMap.set('Kaczka', handleDuckRequest)
     intentMap.set('Oferty', handleOffersRequest)
+    intentMap.set('Wybierz wycieczke', handleChooseOffer)
     agent.handleRequest(intentMap)
 })
+
+function handleChooseOffer(agent) {
+    const name = agent.query
+    return getOffers(name).then(results => {
+        if(results.length == 1){
+            const trip = results[0]
+            agent.add(`Oferta ${trip.name} wyrusza z miasta ${trip.place}. Rozpoczyna się ona ${prettyDate(trip.date)}.\nJeżeli jesteś zainteresowany zadzwoń na numer 523758192 aby zarezerować miejsce`)
+        } else {
+            agent.add("Nie kojarzę takiej oferty :c")
+        }
+    }).catch(err => {
+        console.log(err)
+        agent.add("Ups, coś poszło nie tak...")
+    })
+
+}
 
 function removePolish(string) {
     const from = ["ą", "ć", "ę", "ł", "ń", "ó", "ś", "ż", "ź", "Ą", "Ć", "Ę", "Ł", "Ń", "Ó", "Ś", "Ż", "Ź"]
@@ -39,27 +56,27 @@ function prettyDate(dateString) {
     return `${day.toString().padStart(2, '0')}.${month.toString().padStart(2, '0')}.${year}`
 }
 
-function getAllOffers() {
-    return trips.find({}).exec().then(result => {
-        console.log("Searching the database");
-        if (result.length > 0) {
-            const options = result.map(r => `${prettyDate(r.date)} - "${r.name}"}\n`).join('')
-            return Promise.resolve("W najbliższym czasie oferujemy następujące wycieczi:\n" + options + "Czy któraś z nich Cię interesuje?")
-        } else {
-            return Promise.resolve("Niestety nie mamy obecnie dostępnych żadnych ofert.")
-        }
+function getOffers(name) {
+    return trips.find({ name: name }).exec().then(results => {
+        return Promise.resolve(results)
     }).catch(err => {
         console.log(err)
-        return Promise.resolve("Ups, zapomniałem jakie są oferty. Może zaraz sobie je przypomnę...")
+        return Promise.reject(err)
     })
 }
 
 function handleOffersRequest(agent) {
     console.log("Offers request " + JSON.stringify(agent.parameters));
-    return getAllOffers().then(answer => {
-        agent.add(answer)
+    return getOffers().then(result => {
+        if (result.length > 0) {
+            const options = result.map(r => `${prettyDate(r.date)} - "${r.name}"\n`).join('')
+            agent.add("W najbliższym czasie oferujemy następujące wycieczi:\n" + options + "Czy któraś z nich Cię interesuje?")
+        } else {
+            agent.add("Niestety nie mamy obecnie dostępnych żadnych ofert.")
+        }
     }).catch(err => {
         console.log(err)
+        agent.add("Ups, zapomniałem jakie są oferty. Może zaraz sobie je przypomnę...")
     })
 };
 
