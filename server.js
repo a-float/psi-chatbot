@@ -35,7 +35,6 @@ function getAllOffers() {
     return trips.find({}).exec().then(result => {
         console.log("Searching the database");
         if (result.length > 0) {
-            console.log("W najbliższym czasie oferujemy następujące wycieczi:\n" + options);
             const options = result.map(r => r.name + " " + r.date).join("\n")
             return Promise.resolve("W najbliższym czasie oferujemy następujące wycieczi:\n" + options + "Czy któraś z nich Cię interesuje?")
         } else {
@@ -43,7 +42,7 @@ function getAllOffers() {
         }
     }).catch(err => {
         console.log(err)
-        return Promise.resolve("Ups, zapomniałem jakie są oferty. Może zaraz je sobie przypomnę...")
+        return Promise.resolve("Ups, zapomniałem jakie są oferty. Może zaraz sobie je przypomnę...")
     })
 }
 
