@@ -33,14 +33,17 @@ function removePolish(string) {
 
 function prettyDate(dateString) {
     let date = new Date(dateString)
-    return `${(date.getDate() + 1).toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`
+    let day = date.getDate() + 1
+    let month = date.getMonth() + 1
+    let year = date.getFullYear() + 1
+    return `${day.toString().padStart(2, '0')}.${month.toString().padStart(2, '0')}.${year}`
 }
 
 function getAllOffers() {
     return trips.find({}).exec().then(result => {
         console.log("Searching the database");
         if (result.length > 0) {
-            const options = result.map(r => `"${r.name}" z wyjazdem dnia ${prettyDate(r)}`).join("\n")
+            const options = result.map(r => `${prettyDate(r.date)} - "${r.name}"}\n`).join('')
             return Promise.resolve("W najbliższym czasie oferujemy następujące wycieczi:\n" + options + "Czy któraś z nich Cię interesuje?")
         } else {
             return Promise.resolve("Niestety nie mamy obecnie dostępnych żadnych ofert.")
