@@ -47,7 +47,7 @@ function handleWeatherRequest(agent) {
         let date = Date.parse(agent.parameters.date)
         const now = new Date()
         // console.log(date.toUTCString() + " " + now.toUTCString());
-        if (now.getFullYear() != date.getFullYear || now.getMonth() != date.getMonth() || now.getDay() != date.getDay()) {
+        if (now.getFullYear() != date.getFullYear() || now.getMonth() != date.getMonth() || now.getDay() != date.getDay()) {
             agent.add(Text("Niestety mogę sprawdzić tylko dzisiejszą pogodę."));
         }
     }
