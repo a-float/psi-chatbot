@@ -31,11 +31,15 @@ function removePolish(string) {
     return string
 }
 
+function prettyDate(date) {
+    return `${(date.getDate() + 1).toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`
+}
+
 function getAllOffers() {
     return trips.find({}).exec().then(result => {
         console.log("Searching the database");
         if (result.length > 0) {
-            const options = result.map(r => r.name + " " + r.date).join("\n")
+            const options = result.map(r => `"${r.name} z wyjazdem dnia ${prettyDate(r)}`).join("\n")
             return Promise.resolve("W najbliższym czasie oferujemy następujące wycieczi:\n" + options + "Czy któraś z nich Cię interesuje?")
         } else {
             return Promise.resolve("Niestety nie mamy obecnie dostępnych żadnych ofert.")
@@ -77,7 +81,7 @@ function handleWeatherRequest(agent) {
         const now = new Date()
         console.log(date);
         // console.log(date.toUTCString() + " " + now.toUTCString());
-        if (now.getFullYear() != date.getFullYear() || now.getMonth() != date.getMonth() || now.getDay() != date.getDay()) {
+        if (now.getFullYear() != date.getFullYear() || now.getMonth() != date.getMonth() || now.getDate() != date.getDate()) {
             agent.add(new Text("Niestety mogę sprawdzić tylko dzisiejszą pogodę."));
         }
     }
