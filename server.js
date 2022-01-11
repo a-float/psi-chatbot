@@ -3,6 +3,7 @@ const fetch = require('node-fetch')
 const express = require('express')
 const { WebhookClient } = require('dialogflow-fulfillment')
 const { Image, Text } = require('dialogflow-fulfillment')
+const trips = require("./trips")
 const app = express()
 app.use(express.static('public'))
 app.use(express.json())
@@ -17,6 +18,7 @@ app.post('/webhook', (req, res) => {
     let intentMap = new Map();    // add intent map 2nd parameter pass function
     intentMap.set('Pogoda', handleWeatherRequest)
     intentMap.set('Kaczka', handleDuckRequest)
+    intentMap.set('Oferty', handleOffersRequest)
     agent.handleRequest(intentMap)
 })
 
@@ -29,6 +31,17 @@ function removePolish(string) {
     return string
 }
 
+function handleOffersRequest(agent){
+    trips.find({}, function (err, result) {
+        if (err) {
+            agent.add("Ups, zapomniałem jakie są oferty. Może zaraz je sobie przypomnę...")
+        } else {
+            const options = result.map(r => r.name + " " + r.date).join("\n")
+            agent.add("W najbliższym czasie oferujemy następujące wycieczi:\n" + options + "Czy któraś z nich Cię interesuje?")
+        }
+    });
+}
+
 function handleDuckRequest(agent) {
     console.log("Duck request " + JSON.stringify(agent.parameters));
     const url = "https://random-d.uk/api/v2/quack"
@@ -36,7 +49,7 @@ function handleDuckRequest(agent) {
         console.log(JSON.stringify(json))
         const image = new Image(json.url)
         agent.add(image)
-        agent.add(`(Oto Twoja kaczka! 🦆\n${json.url})`)
+        agent.add(`Oto Twoja kaczka! 🦆\n${json.url}`)
     }).catch(e => {
         console.log(e);
         agent.add("Przepraszam, nie udało mi się złapać żadnej kaczki :<")
@@ -78,6 +91,17 @@ function handleWeatherRequest(agent) {
         agent.add("Ups, nie udało mi się sprawdzić pogody :(");
     })
 }
+
+app.get("/db", function (req, res) {
+    trips.find({}, function (err, result) {
+        if (err) {
+            res.json({ "error": err });
+        } else {
+            console.log(`I found ${JSON.stringify(result)}`);
+            res.json(result);
+        }
+    });
+});
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
