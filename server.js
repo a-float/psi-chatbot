@@ -28,7 +28,9 @@ function handleChooseOffer(agent) {
     return getOffers(name).then(results => {
         if(results.length == 1){
             const trip = results[0]
-            agent.add(`Oferta ${trip.name} wyrusza z miasta ${trip.place}. Rozpoczyna się ona ${prettyDate(trip.date)}.\nJeżeli jesteś zainteresowany zadzwoń na numer 523758192 aby zarezerować miejsce`)
+            agent.add(`Oferta ${trip.name} wyrusza z miasta ${trip.place}. Rozpoczyna się ona ${prettyDate(trip.date)}.`)
+            agent.add("Czy chciałbyś zarezerwować miejsce?")
+            agent.set(trip.name, 2)
         } else {
             agent.add("Nie kojarzę takiej oferty :c")
         }
@@ -56,8 +58,10 @@ function prettyDate(dateString) {
     return `${day.toString().padStart(2, '0')}.${month.toString().padStart(2, '0')}.${year}`
 }
 
-function getOffers(name) {
-    return trips.find({ name: name }).exec().then(results => {
+function getOffers(name="") {
+    const options = {}
+    if(name)options.name = name
+    return trips.find(options).exec().then(results => {
         return Promise.resolve(results)
     }).catch(err => {
         console.log(err)
