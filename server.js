@@ -31,8 +31,8 @@ function removePolish(string) {
     return string
 }
 
-function prettyDate(date) {
-    let date = new Date(date)
+function prettyDate(dateString) {
+    let date = new Date(dateString)
     return `${(date.getDate() + 1).toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`
 }
 
