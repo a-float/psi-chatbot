@@ -33,6 +33,7 @@ function handleDuckRequest(agent) {
     console.log("Duck request " + agent.parameters);
     const url = "https://random-d.uk/api/v2/quack"
     return fetch(url).then(data => data.json).then(json => {
+        console.log(JSON.stringify(json))
         const image = new Image(json.url)
         agent.add(image)
     }).catch(e => {
@@ -42,13 +43,15 @@ function handleDuckRequest(agent) {
 }
 
 function handleWeatherRequest(agent) {
-    console.log("Weather request " + agent.parameters.toString());
+    console.log("Weather request " + JSON.stringify(agent.parameters));
+    console.log(agent.parameters.date);
     if (agent.parameters.date) {
         let date = new Date(agent.parameters.date)
         const now = new Date()
+        console.log(date);
         // console.log(date.toUTCString() + " " + now.toUTCString());
-        if (now.getYe != date.getFullYear() || now.getMonth() != date.getMonth() || now.getDay() != date.getDay()) {
-            agent.add(Text("Niestety mogę sprawdzić tylko dzisiejszą pogodę."));
+        if (now.getFullYear() != date.getFullYear() || now.getMonth() != date.getMonth() || now.getDay() != date.getDay()) {
+            agent.add(new Text("Niestety mogę sprawdzić tylko dzisiejszą pogodę."));
         }
     }
     let city = agent.parameters.city
