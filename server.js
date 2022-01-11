@@ -36,7 +36,7 @@ function handleDuckRequest(agent) {
         console.log(JSON.stringify(json))
         const image = new Image(json.url)
         agent.add(image)
-        agent.add("(Your duck is here "+json.url +")")
+        agent.add("(Your duck is here "+json.url +") 🦆")
     }).catch(e => {
         console.log(e);
         agent.add("Przepraszam, nie udało mi się złapać żadnej kaczki :<")
@@ -70,7 +70,7 @@ function handleWeatherRequest(agent) {
             if (json.main.feels_like < 0) {
                 emoji = "🥶"
             }
-            resp = `W mieście ${city} jest dzisiaj ${json.weather[0].description}. Najniższa temperatura wyniesie ${json.main.temp_min}°C, a najwyższa ${json.main.temp_max}°C. Temperatura odczuwalna wyniesie ${json.main.feels_like}°C. ${emoji}`
+            resp = `Dzisiejsza pogoda w mieście ${city} to ${json.weather[0].description}. Najniższa temperatura wyniesie ${json.main.temp_min}°C, a najwyższa ${json.main.temp_max}°C. Temperatura odczuwalna wyniesie ${json.main.feels_like}°C. ${emoji}`
         }
         agent.add(resp);
     }).catch(e => {
