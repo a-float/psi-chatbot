@@ -31,7 +31,7 @@ function removePolish(string) {
 
 function handleDuckRequest(agent) {
     const url = "https://random-d.uk/api/v2/quack"
-    fetch(url).then(data => data.json).then(json => {
+    return fetch(url).then(data => data.json).then(json => {
         const image = Image(json.url)
         agent.add(image)
     }).catch(e => {
@@ -53,7 +53,7 @@ function handleWeatherRequest(agent) {
     let city = agent.parameters.city
     city = removePolish(city)
     let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=pl&appid=${process.env.WEATHER_KEY}`
-    fetch(url).then(response => response.json()).then(json => {
+    return fetch(url).then(response => response.json()).then(json => {
         if (json.cod != 200) {
             resp = "Niestety nie znam takiego miasta :c"
         }
