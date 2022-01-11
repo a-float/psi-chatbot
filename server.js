@@ -2,7 +2,7 @@ require('dotenv').config()
 const fetch = require('node-fetch')
 const express = require('express')
 const { WebhookClient } = require('dialogflow-fulfillment')
-const { Image, Text } = require('dialogflow-fulfillment')
+const { Image, Text, Card } = require('dialogflow-fulfillment')
 const app = express()
 app.use(express.static('public'))
 app.use(express.json())
@@ -34,9 +34,10 @@ function handleDuckRequest(agent) {
     const url = "https://random-d.uk/api/v2/quack"
     return fetch(url).then(response => response.json()).then(json => {
         console.log(JSON.stringify(json))
-        const image = new Image(json.url)
+        const image = new Card()
+        image.image_url = json.url
         agent.add(image)
-        agent.add("(Your duck is here "+json.url +") 🦆")
+        agent.add(`(Oto Twoja kaczka! <a href="${json.url}">link</a>) 🦆`)
     }).catch(e => {
         console.log(e);
         agent.add("Przepraszam, nie udało mi się złapać żadnej kaczki :<")
