@@ -40,7 +40,7 @@ function handleOffersRequest(agent) {
             agent.add("Ups, zapomniałem jakie są oferty. Może zaraz je sobie przypomnę...")
         } else {
             if (result.length > 0) {
-                console.log("returning the offers");
+                console.log("W najbliższym czasie oferujemy następujące wycieczi:\n" + options);
                 const options = result.map(r => r.name + " " + r.date).join("\n")
                 agent.add("W najbliższym czasie oferujemy następujące wycieczi:\n" + options + "Czy któraś z nich Cię interesuje?")
             } else {
@@ -102,14 +102,8 @@ function handleWeatherRequest(agent) {
 }
 
 app.get("/db", function (req, res) {
-    trips.find({}, function (err, result) {
-        if (err) {
-            res.json({ "error": err });
-        } else {
-            console.log(`I found ${JSON.stringify(result)}`);
-            res.json(result);
-        }
-    });
+    const res = await trips.find({});
+    res.json(res)
 });
 
 const port = process.env.PORT || 3000
