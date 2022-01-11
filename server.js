@@ -31,25 +31,30 @@ function removePolish(string) {
     return string
 }
 
-function handleOffersRequest(agent) {
-    console.log("Offers request " + JSON.stringify(agent.parameters));
+function getAllOffers() {
     trips.find({}, function (err, result) {
         console.log("Searching the database");
         if (err) {
             console.log(err)
-            agent.add("Ups, zapomniałem jakie są oferty. Może zaraz je sobie przypomnę...")
+            return Promise.resolve("Ups, zapomniałem jakie są oferty. Może zaraz je sobie przypomnę...")
         } else {
             if (result.length > 0) {
                 console.log("W najbliższym czasie oferujemy następujące wycieczi:\n" + options);
                 const options = result.map(r => r.name + " " + r.date).join("\n")
-                agent.add("W najbliższym czasie oferujemy następujące wycieczi:\n" + options + "Czy któraś z nich Cię interesuje?")
+                return Promise.resolve("W najbliższym czasie oferujemy następujące wycieczi:\n" + options + "Czy któraś z nich Cię interesuje?")
             } else {
-                agent.add("Niestety nie mamy obecnie dostępnych żadnych ofert.")
+                return Promise.resolve("Niestety nie mamy obecnie dostępnych żadnych ofert.")
             }
         }
-        agent.end("")
-    });
+    })
 }
+
+function handleOffersRequest(agent) {
+    console.log("Offers request " + JSON.stringify(agent.parameters));
+    return getAllOffers().then(answer => {
+        agent.add(answer)
+    })
+};
 
 function handleDuckRequest(agent) {
     console.log("Duck request " + JSON.stringify(agent.parameters));
@@ -102,8 +107,14 @@ function handleWeatherRequest(agent) {
 }
 
 app.get("/db", function (req, res) {
-    const res = await trips.find({});
-    res.json(res)
+    trips.find({}, function (err, result) {
+        if (err) {
+            res.json({ "error": err });
+        } else {
+            console.log(`I found ${JSON.stringify(result)}`);
+            res.json(result);
+        }
+    });
 });
 
 const port = process.env.PORT || 3000
