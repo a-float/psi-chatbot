@@ -25,12 +25,13 @@ app.post('/webhook', (req, res) => {
 
 function handleChooseOffer(agent) {
     const name = agent.query
-    console.log("Choose offer " + JSON.stringify(agent.input_contexts))
+    console.log("Choose offer " + JSON.stringify(agent.contexts))
     return getOffers(name).then(results => {
         if(results.length == 1){
             const trip = results[0]
-            agent.add(`Oferta ${trip.name} wyrusza z miasta ${trip.place} i rozpoczyna się ${prettyDate(trip.date)}.`)
-            agent.add("Czy chciałbyś zarezerwować miejsce?")
+            agent.add(`Oferta ${trip.name} wyrusza ${prettyDate(trip.date)} z ${trip.place}.`)
+            agent.add("Czy chciałbyś złożyć rezerwację?")
+            agent.followupEventInput = "Chosen trip" 
             console.log(Object.keys(agent))
         } else {
             agent.add("Nie kojarzę takiej oferty :c")
