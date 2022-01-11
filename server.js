@@ -30,6 +30,7 @@ function removePolish(string) {
 }
 
 function handleDuckRequest(agent) {
+    console.log("Duck request " + agent.parameters);
     const url = "https://random-d.uk/api/v2/quack"
     return fetch(url).then(data => data.json).then(json => {
         const image = Image(json.url)
@@ -41,10 +42,10 @@ function handleDuckRequest(agent) {
 }
 
 function handleWeatherRequest(agent) {
+    console.log("Weather request " + agent.parameters);
     if (agent.parameters.date) {
         let date = Date.parse(agent.parameters.date)
         const now = new Date()
-        console.log(date);
         // console.log(date.toUTCString() + " " + now.toUTCString());
         if (now.getFullYear() != date.getFullYear || now.getMonth() != date.getMonth() || now.getDay() != date.getDay()) {
             agent.add(Text("Niestety mogę sprawdzić tylko dzisiejszą pogodę."));
