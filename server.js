@@ -32,20 +32,18 @@ function removePolish(string) {
 }
 
 function getAllOffers() {
-    return trips.find({}, function (err, result) {
+    return trips.find({}).exec().then(result => {
         console.log("Searching the database");
-        if (err) {
-            console.log(err)
-            return Promise.resolve("Ups, zapomniałem jakie są oferty. Może zaraz je sobie przypomnę...")
+        if (result.length > 0) {
+            console.log("W najbliższym czasie oferujemy następujące wycieczi:\n" + options);
+            const options = result.map(r => r.name + " " + r.date).join("\n")
+            return Promise.resolve("W najbliższym czasie oferujemy następujące wycieczi:\n" + options + "Czy któraś z nich Cię interesuje?")
         } else {
-            if (result.length > 0) {
-                console.log("W najbliższym czasie oferujemy następujące wycieczi:\n" + options);
-                const options = result.map(r => r.name + " " + r.date).join("\n")
-                return Promise.resolve("W najbliższym czasie oferujemy następujące wycieczi:\n" + options + "Czy któraś z nich Cię interesuje?")
-            } else {
-                return Promise.resolve("Niestety nie mamy obecnie dostępnych żadnych ofert.")
-            }
+            return Promise.resolve("Niestety nie mamy obecnie dostępnych żadnych ofert.")
         }
+    }).catch(err => {
+        console.log(err)
+        return Promise.resolve("Ups, zapomniałem jakie są oferty. Może zaraz je sobie przypomnę...")
     })
 }
 
