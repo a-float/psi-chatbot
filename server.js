@@ -34,7 +34,7 @@ function handleDuckRequest(agent) {
     const url = "https://random-d.uk/api/v2/quack"
     return fetch(url).then(response => response.json()).then(json => {
         console.log(JSON.stringify(json))
-        const image = new Card()
+        const image = new Card(title="The Duck")
         image.image_url = json.url
         agent.add(image)
         agent.add(`(Oto Twoja kaczka! <a href="${json.url}">link</a>) 🦆`)
