@@ -19,7 +19,7 @@ app.post('/webhook', (req, res) => {
     intentMap.set('Pogoda', handleWeatherRequest)
     intentMap.set('Kaczka', handleDuckRequest)
     intentMap.set('Oferty', handleOffersRequest)
-    intentMap.set('Oferty - yes - custom', handleChooseOffer)
+    intentMap.set('Wybierz wycieczke', handleChooseOffer)
     agent.handleRequest(intentMap)
 })
 
@@ -29,7 +29,7 @@ function handleChooseOffer(agent) {
     return getOffers(name).then(results => {
         if(results.length == 1){
             const trip = results[0]
-            agent.add(`Oferta ${trip.name} wyrusza z miasta ${trip.place}. Rozpoczyna się ona ${prettyDate(trip.date)}.`)
+            agent.add(`Oferta ${trip.name} wyrusza z miasta ${trip.place} i rozpoczyna się ${prettyDate(trip.date)}.`)
             agent.add("Czy chciałbyś zarezerwować miejsce?")
             agent.set(trip.name, 2)
         } else {
