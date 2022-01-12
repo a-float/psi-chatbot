@@ -49,7 +49,7 @@ function handleReserveYes(agent) {
             tripname = ctx.name.substring(5, ctx.name.length)
         }
     }
-    console.log("tripname si " + tripname)
+    console.log("tripname is " + tripname)
     if (tripname) {
         agent.add(`Super!\nZa moment wyślę Ci potwierdzenie Twojej rezerwacji miejsca na wycieczkę "${tripname}"!`)
     } else {
@@ -58,15 +58,13 @@ function handleReserveYes(agent) {
 }
 
 function handleChooseOffer(agent) {
-    console.log(agent.contexts);
     if (agent.contexts.find(ele => ele.name == "want-trip") != undefined) {
-        console.log("Fallback wants brings the trip!");
         const name = agent.query
         console.log("Choose offer " + JSON.stringify(agent.contexts))
         return getOffers(name).then(results => {
             if (results.length == 1) {
                 const trip = results[0]
-                agent.add(`Oferta ${trip.name} wyrusza ${prettyDate(trip.date)} z ${trip.place}.`)
+                agent.add(`Oferta ${trip.name} wyrusza ${prettyDate(trip.date)} i odbywa się w ${trip.place}.`)
                 agent.add("Czy chciałbyś złożyć rezerwację?")
                 context = { name: "chosen-trip", lifespan: 1 }
                 agent.context.set(context)
@@ -148,7 +146,6 @@ function handleWeatherRequest(agent) {
         let date = new Date(agent.parameters.date)
         const now = new Date()
         console.log(date);
-        // console.log(date.toUTCString() + " " + now.toUTCString());
         if (now.getFullYear() != date.getFullYear() || now.getMonth() != date.getMonth() || now.getDate() != date.getDate()) {
             agent.add(new Text("Niestety mogę sprawdzić tylko dzisiejszą pogodę."));
         }
