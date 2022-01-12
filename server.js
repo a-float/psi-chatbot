@@ -34,7 +34,7 @@ function handleReserveYes(agent) {
     }
     console.log("tripname si " + tripname)
     if (tripname) {
-        agent.add(`Super!\nZa moment wyślę Ci potwierdzenie Twojej rezerwacji miejsca na wycieczkę "${tripname}"`)
+        agent.add(`Super!\nZa moment wyślę Ci potwierdzenie Twojej rezerwacji miejsca na wycieczkę "${tripname}"!`)
     } else {
         agent.add("Ups coś poszło nie tak. Może następnym razem...")
     }
