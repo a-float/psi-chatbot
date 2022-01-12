@@ -20,37 +20,30 @@ app.post('/webhook', (req, res) => {
     intentMap.set('Pogoda', handleWeatherRequest)
     intentMap.set('Kaczka', handleDuckRequest)
     intentMap.set('Oferty', handleOffersRequest)
-    intentMap.set('Wybierz wycieczke', handleChooseOffer)
-    intentMap.set('Oferty - yes', handleWantOffer)
+    intentMap.set('Default Fallback', handleChooseOffer)
     agent.handleRequest(intentMap)
 })
 
-function handleWantOffer(agent){
-    agent.followupEventInput = "Chosen trip"
-    agent.followupEvent_ = "Chosen trip"
-    console.log(agent.session);
-    console.log(util.inspect(agent))
-    agent.add("Ok która")
-}
-
 function handleChooseOffer(agent) {
-    const name = agent.query
-    console.log("Choose offer " + JSON.stringify(agent.contexts))
-    return getOffers(name).then(results => {
-        if(results.length == 1){
-            const trip = results[0]
-            agent.add(`Oferta ${trip.name} wyrusza ${prettyDate(trip.date)} z ${trip.place}.`)
-            agent.add("Czy chciałbyś złożyć rezerwację?")
-            agent.followupEventInput = "Chosen trip" 
-            console.log(Object.keys(agent))
-        } else {
-            agent.add("Nie kojarzę takiej oferty :c")
-        }
-    }).catch(err => {
-        console.log(err)
-        agent.add("Ups, coś poszło nie tak...")
-    })
-
+    if (agent.contexts.map(ctx => ctx.name).contains("want-trip")) {
+        console.log("Fallback wants brings the trip!");
+        const name = agent.query
+        console.log("Choose offer " + JSON.stringify(agent.contexts))
+        return getOffers(name).then(results => {
+            if (results.length == 1) {
+                const trip = results[0]
+                agent.add(`Oferta ${trip.name} wyrusza ${prettyDate(trip.date)} z ${trip.place}.`)
+                agent.add("Czy chciałbyś złożyć rezerwację?")
+                agent.followupEventInput = "Chosen trip"
+                console.log(Object.keys(agent))
+            } else {
+                agent.add("Nie kojarzę takiej oferty :c")
+            }
+        }).catch(err => {
+            console.log(err)
+            agent.add("Ups, coś poszło nie tak...")
+        })
+    }
 }
 
 function removePolish(string) {
@@ -70,9 +63,9 @@ function prettyDate(dateString) {
     return `${day.toString().padStart(2, '0')}.${month.toString().padStart(2, '0')}.${year}`
 }
 
-function getOffers(name="") {
+function getOffers(name = "") {
     const options = {}
-    if(name)options.name = name
+    if (name) options.name = name
     return trips.find(options).exec().then(results => {
         return Promise.resolve(results)
     }).catch(err => {
