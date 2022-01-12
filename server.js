@@ -20,8 +20,14 @@ app.post('/webhook', (req, res) => {
     intentMap.set('Kaczka', handleDuckRequest)
     intentMap.set('Oferty', handleOffersRequest)
     intentMap.set('Wybierz wycieczke', handleChooseOffer)
+    intentMap.set('Oferty - yes', handleWantOffer)
     agent.handleRequest(intentMap)
 })
+
+function handleWantOffer(agent){
+    agent.followupEventInput = "Chosen trip"
+    console.log(Object.keys(agent))
+}
 
 function handleChooseOffer(agent) {
     const name = agent.query
