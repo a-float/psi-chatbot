@@ -25,7 +25,8 @@ app.post('/webhook', (req, res) => {
 })
 
 function handleChooseOffer(agent) {
-    if (Object.keys(agent.inputContexts).contains("want-trip")) {
+    console.log(agent.contexts);
+    if (agent.contexts.map(ctx => ctx.name).contains("want-trip")) {
         console.log("Fallback wants brings the trip!");
         const name = agent.query
         console.log("Choose offer " + JSON.stringify(agent.contexts))
