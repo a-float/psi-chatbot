@@ -28,12 +28,16 @@ app.post('/webhook', (req, res) => {
 function handleReserveYes(agent) {
     let tripname = null
     for (const ctx of agent.contexts) {
-        if (ctx.name.startsWith("TRIP-")) {
+        if (ctx.name.startsWith("trip-")) {
             tripname = ctx.name.substring(5, ctx.name.length)
         }
     }
     console.log("tripname si " + tripname)
-    agent.add(`Super!\nZa moment wyślę Ci potwierdzenie Twojej rezerwacji miejsca na wycieczkę "${tripname}"`)
+    if (tripname) {
+        agent.add(`Super!\nZa moment wyślę Ci potwierdzenie Twojej rezerwacji miejsca na wycieczkę "${tripname}"`)
+    } else {
+        agent.add("Ups coś poszło nie tak. Może następnym razem...")
+    }
 }
 
 function handleChooseOffer(agent) {
@@ -49,7 +53,7 @@ function handleChooseOffer(agent) {
                 agent.add("Czy chciałbyś złożyć rezerwację?")
                 context = { name: "chosen-trip", lifespan: 1 }
                 agent.context.set(context)
-                context = { name: "TRIP-" + trip.name, lifespan: 1 }
+                context = { name: "trip-" + trip.name, lifespan: 1 }
                 agent.context.set(context)
             } else {
                 context = { name: "want-trip", lifespan: 1 }
