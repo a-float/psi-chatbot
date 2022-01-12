@@ -4,6 +4,7 @@ const express = require('express')
 const { WebhookClient } = require('dialogflow-fulfillment')
 const { Image, Text } = require('dialogflow-fulfillment')
 const trips = require("./trips")
+const util = require("util")
 const app = express()
 app.use(express.static('public'))
 app.use(express.json())
@@ -28,7 +29,7 @@ function handleWantOffer(agent){
     agent.followupEventInput = "Chosen trip"
     agent.followupEvent_ = "Chosen trip"
     console.log(agent.session);
-    console.log(JSON.stringify(agent))
+    console.log(util.inspect(agent))
     agent.add("Ok która")
 }
 
