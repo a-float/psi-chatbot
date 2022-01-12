@@ -35,9 +35,11 @@ function handleChooseOffer(agent) {
                 const trip = results[0]
                 agent.add(`Oferta ${trip.name} wyrusza ${prettyDate(trip.date)} z ${trip.place}.`)
                 agent.add("Czy chciałbyś złożyć rezerwację?")
-                agent.followupEventInput = "Chosen trip"
-                console.log(Object.keys(agent))
+                context = { name: "chosen-trip", lifespan: 1, tripname: trip.name }
+                agent.context.set(context)
             } else {
+                context = { name: "want-trip", lifespan: 1 }
+                agent.context.set(context)
                 agent.add("Nie kojarzę takiej oferty :c")
             }
         }).catch(err => {
