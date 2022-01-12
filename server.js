@@ -26,7 +26,10 @@ app.post('/webhook', (req, res) => {
 
 function handleWantOffer(agent){
     agent.followupEventInput = "Chosen trip"
-    console.log(Object.keys(agent))
+    agent.followupEvent_ = "Chosen trip"
+    console.log(agent.session);
+    console.log(JSON.stringify(agent))
+    agent.add("Ok która")
 }
 
 function handleChooseOffer(agent) {
