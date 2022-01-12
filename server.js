@@ -22,8 +22,25 @@ app.post('/webhook', (req, res) => {
     intentMap.set('Oferty', handleOffersRequest)
     intentMap.set('Default Fallback', handleChooseOffer)
     intentMap.set('Reserve yes', handleReserveYes)
+    intentMap.set('Losowa', handleRandom)
     agent.handleRequest(intentMap)
 })
+
+function handleRandom(agent){
+    return getOffers().then(result => {
+        if (result.length > 0) {
+            const chosen = result[Math.floor(Math.random()*result.length)];
+            if(Math.random() < 0.5){
+                agent.add(`Wylosowałem wycieczkę "${chosen.name}"!`)
+            } else {
+                agent.add(`A może by tak "${chosen.name}"?`)
+            }
+        }
+    }).catch(err => {
+        console.log(err)
+        agent.add("Nie potrafie się zdecydować :c")
+    })
+}
 
 function handleReserveYes(agent) {
     let tripname = null
