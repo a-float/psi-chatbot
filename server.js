@@ -20,7 +20,7 @@ app.post('/webhook', (req, res) => {
     intentMap.set('Pogoda', handleWeatherRequest)
     intentMap.set('Kaczka', handleDuckRequest)
     intentMap.set('Oferty', handleOffersRequest)
-    intentMap.set('Default Fallback', handleChooseOffer)
+    intentMap.set('Choose trip fallback', handleChooseOffer)
     intentMap.set('Reserve yes', handleReserveYes)
     intentMap.set('Losowa', handleRandom)
     agent.handleRequest(intentMap)
