@@ -21,8 +21,16 @@ app.post('/webhook', (req, res) => {
     intentMap.set('Kaczka', handleDuckRequest)
     intentMap.set('Oferty', handleOffersRequest)
     intentMap.set('Default Fallback', handleChooseOffer)
+    intentMap.set('Reserve yes', handleReserveYes)
     agent.handleRequest(intentMap)
 })
+
+function handleReserveYes(agent){
+    context = agent.context.get('chosen-trip')
+    tripname = context.tripname
+    console.log(context, tripname)
+    agent.add(`Super!\nZa moment wyślę Ci potwierdzenie Twojej rezerwacji miejsca na wycieczkę "${tripname}"`)
+}
 
 function handleChooseOffer(agent) {
     console.log(agent.contexts);
