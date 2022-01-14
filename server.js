@@ -31,9 +31,9 @@ function handleRandom(agent){
         if (result.length > 0) {
             const chosen = result[Math.floor(Math.random()*result.length)];
             if(Math.random() < 0.5){
-                agent.add(`Wylosowałem wycieczkę "${chosen.name}"!`)
+                agent.add(`Wylosowałem wycieczkę "${chosen.name}"`)
             } else {
-                agent.add(`A może by tak "${chosen.name}"?`)
+                agent.add(`Wylosowałem "${chosen.name}"`)
             }
         }
     }).catch(err => {
@@ -82,7 +82,7 @@ function handleChooseOffer(agent) {
     }
 }
 
-function removePolish(string) {
+function removePolishChars(string) {
     const from = ["ą", "ć", "ę", "ł", "ń", "ó", "ś", "ż", "ź", "Ą", "Ć", "Ę", "Ł", "Ń", "Ó", "Ś", "Ż", "Ź"]
     const to = ["a", "c", "e", "l", "n", "o", "s", "z", "z", "A", "C", "E", "L", "N", "O", "S", "Z", "Z"]
     for (let i = 0; i < from.length; i++) {
@@ -151,7 +151,7 @@ function handleWeatherRequest(agent) {
         }
     }
     let city = agent.parameters.city
-    city = removePolish(city)
+    city = removePolishChars(city)
     let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=pl&appid=${process.env.WEATHER_KEY}`
     return fetch(url).then(response => response.json()).then(json => {
         if (json.cod != 200) {

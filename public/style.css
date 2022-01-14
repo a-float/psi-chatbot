@@ -12,3 +12,9 @@
 .hero-background.is-transparent {
     opacity: 0.8;     
 }
+::-webkit-scrollbar {
+    width: 3px;
+}
+body {
+    scrollbar-width: thin;
+}
